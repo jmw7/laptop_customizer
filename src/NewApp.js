@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 
-// Normalizes string as a slug - a string that is safe to use
-// in both URLs and html attributes
-import slugify from 'slugify';
 
 import './App.css';
 import Summary from './Summary/Summary';
 import Total from './Total/Total';
-import FeatureItem from './FeatureItem';
+import Feature from './Feature/Feature';
 
 // This object will allow us to
 // easily convert numbers into US dollar values
@@ -47,30 +44,6 @@ class App extends Component {
   };
 
   render() {
-    const features = Object.keys(this.props.features).map((feature, idx) => {
-      const featureHash = feature + '-' + idx;
-      const options = this.props.features[feature].map(item => {
-        <FeatureItem 
-          selected={this.state.selected}
-          key={slugify(JSON.stringify(item))}
-          feature={item}
-          name={item.name}
-          cost={item.cost}
-          formatCost={USCurrencyFormat}
-          handleUpdate={(feature, newItem)=>this.updateFeature(feature,newItem)}
-        />
-      });
-
-      return (
-        <fieldset className="feature" key={featureHash}>
-          <legend className="feature__name">
-            <h3>{feature}</h3>
-          </legend>
-          {options}
-        </fieldset>
-      );
-    });
-
     return (
       <div className="App">
         <header>
@@ -79,18 +52,23 @@ class App extends Component {
         <main>
           <form className="main__form">
             <h2>Customize your laptop</h2>
-            {features}
+            <Feature
+              features={this.props.features}
+              selected={this.state.selected}
+              formatCost={USCurrencyFormat}
+              handleUpdate={(feature, newItem) => this.updateFeature(feature, newItem)}
+            />
           </form>
           <section className="main__summary">
             <h2>Your cart</h2>
             <Summary
               selected={this.state.selected}
               formatCost={USCurrencyFormat}
-              />
-            <Total 
+            />
+            <Total
               selected={this.state.selected}
               formatCost={USCurrencyFormat}
-              />
+            />
           </section>
         </main>
       </div>
