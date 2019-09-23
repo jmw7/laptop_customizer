@@ -9,34 +9,10 @@ import Header from './Header/Header';
 import Feature from './Feature/Feature';
 import Cart from './Cart/Cart';
 
-// This object will allow us to
-// easily convert numbers into US dollar values
-const USCurrencyFormat = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD'
-});
+
 
 class App extends Component {
-  state = {
-    selected: {
-      Processor: {
-        name: '17th Generation Intel Core HB (7 Core with donut spare)',
-        cost: 700
-      },
-      'Operating System': {
-        name: 'Ubuntu Linux 16.04',
-        cost: 200
-      },
-      'Video Card': {
-        name: 'Toyota Corolla 1.5v',
-        cost: 1150.98
-      },
-      Display: {
-        name: '15.6" UHD (3840 x 2160) 60Hz Bright Lights and Knobs',
-        cost: 1500
-      }
-    }
-  };
+
 
   updateFeature = (feature, newValue) => {
     const selected = Object.assign({}, this.state.selected);
@@ -46,7 +22,11 @@ class App extends Component {
     });
   };
 
-  
+  /*FeatureItem component - should be in the featureItem file
+  Did have a parent component Features but seems excessive and unncessary
+  what props need to be passed to it?
+  How to break it down in children components is the difficult thing.
+  */
   render() {
     const features = Object.keys(this.props.features).map((feature, idx) => {
       const featureHash = feature + '-' + idx;
@@ -64,9 +44,9 @@ class App extends Component {
             />
             <label htmlFor={itemHash} className="feature__label">
               {item.name} ({USCurrencyFormat.format(item.cost)})
-          </label>
+            </label>
           </div>
-        );
+        )
       });
 
       return (
@@ -79,7 +59,11 @@ class App extends Component {
       );
     });
 
-
+    /*Cart component
+    As stated above about the feature component.
+    The thing to figure out is how to break down to children component
+    And should total be a sibling or child component?
+    */
     const summary = Object.keys(this.state.selected).map((feature, idx) => {
       const featureHash = feature + '-' + idx;
       const selectedOption = this.state.selected[feature];
@@ -89,7 +73,7 @@ class App extends Component {
           <div className="summary__option__label">{feature} </div>
           <div className="summary__option__value">{selectedOption.name}</div>
           <div className="summary__option__cost">
-            {USCurrencyFormat.format(selectedOption.cost)}
+            {DollarFormat.format(selectedOption.cost)}
           </div>
         </div>
       );
@@ -100,29 +84,7 @@ class App extends Component {
       0
     );
 
-    return (
-      <div className="App">
-        <header>
-          <h1>ELF Computing | Laptops</h1>
-        </header>
-        <main>
-          <form className="main__form">
-            <h2>Customize your laptop</h2>
-            {features}
-          </form>
-          <section className="main__summary">
-            <h2>Your cart</h2>
-            {summary}
-            <div className="summary__total">
-              <div className="summary__total__label">Total</div>
-              <div className="summary__total__value">
-                {USCurrencyFormat.format(total)}
-              </div>
-            </div>
-          </section>
-        </main>
-      </div>
-    );
+
   }
 }
 
